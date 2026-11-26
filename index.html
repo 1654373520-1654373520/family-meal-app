@@ -16,6 +16,18 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <!-- 密码锁 -->
+  <div id="lock" class="lock">
+    <div class="lock-card">
+      <div class="lock-ico">🔒</div>
+      <h1>家庭点菜助手</h1>
+      <p class="lock-sub">输入密码进入</p>
+      <input id="lockInput" type="password" inputmode="numeric" placeholder="请输入密码" autocomplete="off">
+      <div id="lockError" class="lock-error"></div>
+      <button id="lockBtn" class="confirm-btn">进 入</button>
+    </div>
+  </div>
+
   <div id="app">
     <main id="view"></main>
     <nav id="nav"></nav>
