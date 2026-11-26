@@ -884,6 +884,47 @@
     history.replaceState(null, '', location.pathname + location.search);
   }
 
+  /* ---------------- 密码锁 ---------------- */
+  const PASS_HASH = '48818c6e6eb2ba468317d76accf24e92dd47e6c09c7db349356fad01d834015e';
+  const UNLOCK_KEY = 'fma.unlocked';
+
+  function isUnlocked() {
+    try { return localStorage.getItem(UNLOCK_KEY) === '1'; } catch (e) { return false; }
+  }
+
+  function sha256hex(s) {
+    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(s))
+      .then(buf => Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join(''));
+  }
+
+  function showLock() {
+    const lock = document.getElementById('lock');
+    if (!lock) { init(); return; }
+    lock.classList.remove('hidden');
+    const input = document.getElementById('lockInput');
+    const err = document.getElementById('lockError');
+    const btn = document.getElementById('lockBtn');
+
+    function tryUnlock() {
+      const v = input.value.trim();
+      if (!v) { err.textContent = '请输入密码'; return; }
+      sha256hex(v).then(h => {
+        if (h === PASS_HASH) {
+          try { localStorage.setItem(UNLOCK_KEY, '1'); } catch (e) {}
+          lock.classList.add('hidden');
+          init();
+        } else {
+          err.textContent = '密码不对，再试一次';
+          input.value = '';
+          input.focus();
+        }
+      });
+    }
+    btn.addEventListener('click', tryUnlock);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') tryUnlock(); });
+    setTimeout(function () { input.focus(); }, 50);
+  }
+
   /* ---------------- 初始化 ---------------- */
   function init() {
     loadState();
@@ -916,9 +957,19 @@
     }
   }
 
+  function start() {
+    if (isUnlocked() || !(typeof crypto !== 'undefined' && crypto.subtle)) {
+      const lock = document.getElementById('lock');
+      if (lock) lock.classList.add('hidden');
+      init();
+      return;
+    }
+    showLock();
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', start);
   } else {
-    init();
+    start();
   }
 })();
