@@ -274,7 +274,7 @@
         sharedNote +
         '<div class="day-list">' + body + '</div>' +
         '<div class="confirm-bar">' +
-          '<button class="confirm-btn" data-action="saveAndShare">保存并发送给男朋友</button>' +
+          '<button class="confirm-btn" data-action="saveAndShare">保存并发送</button>' +
         '</div>' +
       '</div>';
   }
@@ -748,7 +748,7 @@
         '<button class="sheet-close" data-action="closeModal">✕</button>' +
         '<div class="confirm-ico">✅</div>' +
         '<h2>菜单已保存</h2>' +
-        '<p class="muted">把下面链接发给男朋友，他点开就能看到你点的菜。</p>' +
+        '<p class="muted">把下面链接发给 TA，TA 点开就能看到你点的菜。</p>' +
         '<textarea id="shareLink" class="share-link" readonly rows="3">' + esc(url) + '</textarea>' +
         '<div class="sheet-actions">' +
           '<button class="btn-primary" data-action="copyShare">复制链接</button>' +
